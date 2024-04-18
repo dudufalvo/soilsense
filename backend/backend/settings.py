@@ -26,10 +26,9 @@ SECRET_KEY = 'django-insecure-cu^da@f_aj(df82%l&okprs(662-5f_r1y+%o!n@hzddj*8zb^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://localhost:5173/','soilsense.pythonanywhere.com']
+ALLOWED_HOSTS = ['soilsense.pythonanywhere.com']
 
-
-# Application definition
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'https://soilsense.pythonanywhere.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

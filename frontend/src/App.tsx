@@ -57,7 +57,7 @@ const App = () => {
   const [data, setData] = useState<SoilDataType[]>([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/soil-data/')
+    axios.get('http://soilsense.pythonanywhere.com/api/soil-data/')
     .then((response) => {
       const data = response.data;
       const soilData = data.map((item: FetchDataType) => {
