@@ -16,6 +16,6 @@ urlpatterns = [
   path('central/<str:pk>/', views.central_detail),
   path('node/', views.node_list),
   path('node/<str:pk>/', views.node_detail),
-  path('soil_data/', views.soil_data_list),
-  path('soil_data/<str:pk>/', views.soil_data_detail),
+  path('soil-data/', views.soil_data_list),
+  path('soil-data/<str:pk>/', views.soil_data_detail),
 ]

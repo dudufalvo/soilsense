@@ -63,7 +63,7 @@ class SoilDataSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
-  central = CentralSerializer(many=True, read_only=True)
+  #central = CentralSerializer(many=True, read_only=True)
   
   class Meta:
     model = CustomUser
@@ -72,4 +72,4 @@ class UserSerializer(serializers.ModelSerializer):
 class ListUsersSerializer(serializers.ModelSerializer):
   class Meta:
     model = CustomUser
-    fields = ('id', 'username', 'email', 'image')
+    fields = '__all__'

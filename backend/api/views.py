@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import JSONParser
 from django.http import JsonResponse
 from .models import CustomUser, Central, Node, SoilData
-from .serializers import CentralSerializer, NodeSerializer, SoilDataSerializer, UserSerializer, MyTokenObtainPairSerializer, RegisterSerializer
+from .serializers import CentralSerializer, NodeSerializer, SoilDataSerializer, UserSerializer, MyTokenObtainPairSerializer, RegisterSerializer, ListUsersSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -35,7 +35,7 @@ def update_profile(request):
 @api_view(['GET'])
 def list_users(request):
   users = CustomUser.objects.all()
-  serializer = UserSerializer(users, many=True)
+  serializer = ListUsersSerializer(users, many=True)
   return JsonResponse(serializer.data, safe=False)
 
 @api_view(['GET', 'POST'])
