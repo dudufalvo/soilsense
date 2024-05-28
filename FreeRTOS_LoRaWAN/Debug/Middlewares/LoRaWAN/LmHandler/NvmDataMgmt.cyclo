@@ -1,0 +1,4 @@
+/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Middlewares/Third_Party/LoRaWAN/LmHandler/NvmDataMgmt.c:52:6:NvmDataMgmtEvent	1
+/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Middlewares/Third_Party/LoRaWAN/LmHandler/NvmDataMgmt.c:59:10:NvmDataMgmtStore	1
+/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Middlewares/Third_Party/LoRaWAN/LmHandler/NvmDataMgmt.c:154:10:NvmDataMgmtRestore	1
+/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Middlewares/Third_Party/LoRaWAN/LmHandler/NvmDataMgmt.c:221:6:NvmDataMgmtFactoryReset	1
