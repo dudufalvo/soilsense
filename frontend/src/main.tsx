@@ -1,10 +1,20 @@
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import { ToastContainer } from 'react-toastify'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+import './styles/global.scss'
+import App from './App'
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+)
+
+root.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID} >
+      <ToastContainer />
+      <App />
+    </GoogleOAuthProvider>
+  </React.StrictMode>
 )

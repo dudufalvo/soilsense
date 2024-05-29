@@ -1,9 +1,7 @@
 import { BiChevronDown } from 'react-icons/bi'
 
-
-import logoText from '../../assets/logo1.svg'
-import logo from '../../assets/logo2.svg'
-
+import logo from '../../assets/logo.svg'
+import logoText from '../../assets/logoText.svg'
 import styles from './navbar.module.scss'
 
 export const Navbar = () => {
