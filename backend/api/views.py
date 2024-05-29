@@ -110,6 +110,7 @@ def node_detail(request, pk):
 
 @api_view(['GET', 'POST'])
 def soil_data_list(request):
+  print(request)
   if request.method == 'GET':
     soil_data = SoilData.objects.all()
     serializer = SoilDataSerializer(soil_data, many=True)
