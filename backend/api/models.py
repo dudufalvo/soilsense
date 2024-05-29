@@ -16,7 +16,7 @@ class Central(models.Model):
   central_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(CustomUser, on_delete=CASCADE, null=True, blank=True)
   name = models.CharField(max_length=150)
-  image = models.CharField(max_length=150)
+  image = models.CharField(max_length=150, default='https://static.vecteezy.com/system/resources/previews/004/261/672/original/green-seedling-planted-in-box-spring-natural-decorative-design-element-colorful-seasonal-illustration-in-flat-cartoon-style-vector.jpg')
   latitude = models.FloatField()
   longitude = models.FloatField()
 

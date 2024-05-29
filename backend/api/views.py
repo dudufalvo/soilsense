@@ -116,7 +116,21 @@ def soil_data_list(request):
     return JsonResponse(serializer.data, safe=False)
   elif request.method == 'POST':
     data = JSONParser().parse(request)
-    print(data)
+
+    # extract data from the request
+    moisture = data['uplink_message']['decoded_payload']['moisture']
+    device_id = data['end_device_ids']['device_id']
+    latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
+    longitude = data['uplink_message']['rx_metadata'][0]['location']['longitude']
+
+    # create a dictionary with extracted data
+    soil_data = {
+      'moisture': moisture,
+      'device_id': device_id,
+      'latitude': latitude,
+      'longitude': longitude
+    }
+
     serializer = SoilDataSerializer(data=data)
     if serializer.is_valid():
       serializer.save()
