@@ -17,23 +17,23 @@ class Central(models.Model):
   user = models.ForeignKey(CustomUser, on_delete=CASCADE, null=True, blank=True)
   name = models.CharField(max_length=150)
   image = models.CharField(max_length=150, default='https://static.vecteezy.com/system/resources/previews/004/261/672/original/green-seedling-planted-in-box-spring-natural-decorative-design-element-colorful-seasonal-illustration-in-flat-cartoon-style-vector.jpg')
-  latitude = models.FloatField()
-  longitude = models.FloatField()
+  latitude = models.FloatField(default=0.0)
+  longitude = models.FloatField(default=0.0)
 
   def __str__(self):
     return self.central_id
 
 class Node(models.Model):
-  node_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  node_id = models.CharField(max_length=150, primary_key=True)
   central = models.ForeignKey(Central, on_delete=CASCADE)
-  latitude = models.FloatField()
-  longitude = models.FloatField()
+  latitude = models.FloatField(default=0.0)
+  longitude = models.FloatField(default=0.0)
 
   def __str__(self):
     return self.node_id
 
 class SoilData(models.Model):
-  soil_data_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  soil_data_id = models.CharField(max_length=150, primary_key=True)
   node = models.ForeignKey(Node, on_delete=CASCADE)
   moisture = models.FloatField()
   timestamp = models.DateTimeField(default=timezone.now)
