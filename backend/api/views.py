@@ -115,27 +115,34 @@ def soil_data_list(request):
     serializer = SoilDataSerializer(soil_data, many=True)
     return JsonResponse(serializer.data, safe=False)
   elif request.method == 'POST':
-    data = JSONParser().parse(request)
+    try:
+      data = JSONParser().parse(request)
 
-    # extract data from the request
-    moisture = data['uplink_message']['decoded_payload']['moisture']
-    device_id = data['end_device_ids']['device_id']
-    latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
-    longitude = data['uplink_message']['rx_metadata'][0]['location']['longitude']
+      # extract data from the request
+      moisture = data['uplink_message']['decoded_payload']['moisture']
+      device_id = data['end_device_ids']['device_id']
+      latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
+      longitude = data['uplink_message']['rx_metadata'][0]['location']['longitude']
 
-    # create a dictionary with extracted data
-    soil_data = {
-      'moisture': moisture,
-      'device_id': device_id,
-      'latitude': latitude,
-      'longitude': longitude
-    }
+      # create a dictionary with extracted data
+      soil_data = {
+        'moisture': moisture,
+        'device_id': device_id,
+        'latitude': latitude,
+        'longitude': longitude
+      }
 
-    serializer = SoilDataSerializer(data=data)
-    if serializer.is_valid():
-      serializer.save()
-      return JsonResponse(serializer.data, status=201)
-    return JsonResponse(serializer.errors, status=400)
+      # create a serializer instance with the extracted data
+      serializer = SoilDataSerializer(data=soil_data)
+      
+      # check if the serializer is valid
+      if serializer.is_valid():
+        # save the data to the database
+        serializer.save()
+        return JsonResponse(serializer.data, status=201)
+      return JsonResponse(serializer.errors, status=400)
+    except Exception as e:
+      return JsonResponse({'message': str(e)}, status=400)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def soil_data_detail(request, pk):
