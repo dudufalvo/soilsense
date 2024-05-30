@@ -118,6 +118,8 @@ def soil_data_list(request):
     try:
       data = JSONParser().parse(request)
 
+      print(data)
+
       # extract data from the request
       soil_data_id = data['unique_id']
       moisture = data['uplink_message']['decoded_payload']['moisture']
