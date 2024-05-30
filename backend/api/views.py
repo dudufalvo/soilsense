@@ -126,6 +126,7 @@ def soil_data_list(request):
       latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
       longitude = data['uplink_message']['rx_metadata'][0]['location']['longitude']
       timestamp = data['received_at']
+      battery = data['uplink_message']['decoded_payload']['battery']
 
       node = Node.objects.get(node_id=device_id)
 
@@ -135,7 +136,8 @@ def soil_data_list(request):
         'moisture': moisture,
         'latitude': latitude,
         'longitude': longitude,
-        'timestamp': timestamp
+        'timestamp': timestamp,
+        'battery': battery
       }
 
       print(soil_data)

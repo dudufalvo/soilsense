@@ -37,6 +37,7 @@ class SoilData(models.Model):
   timestamp = models.DateTimeField(default=timezone.now)
   latitude = models.FloatField(default=0.0)
   longitude = models.FloatField(default=0.0)
+  battery = models.FloatField(default=0.0)
 
   def __str__(self):
     return self.soil_data_id
