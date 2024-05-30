@@ -31,7 +31,7 @@ class Node(models.Model):
     return self.node_id
 
 class SoilData(models.Model):
-  soil_data_id = models.CharField(max_length=150, primary_key=True)
+  soil_data_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   node = models.ForeignKey(Node, on_delete=CASCADE)
   moisture = models.FloatField()
   timestamp = models.DateTimeField(default=timezone.now)

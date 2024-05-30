@@ -121,7 +121,6 @@ def soil_data_list(request):
       print(data)
 
       # extract data from the request
-      soil_data_id = data['unique_id']
       moisture = data['uplink_message']['decoded_payload']['moisture']
       device_id = data['end_device_ids']['device_id']
       latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
@@ -132,7 +131,6 @@ def soil_data_list(request):
 
       # create a dictionary containing the extracted data
       soil_data = {
-        'soil_data_id': soil_data_id,
         'node': node,
         'moisture': moisture,
         'latitude': latitude,
