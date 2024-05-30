@@ -119,18 +119,26 @@ def soil_data_list(request):
       data = JSONParser().parse(request)
 
       # extract data from the request
+      soil_data_id = data['unique_id']
       moisture = data['uplink_message']['decoded_payload']['moisture']
       device_id = data['end_device_ids']['device_id']
       latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
       longitude = data['uplink_message']['rx_metadata'][0]['location']['longitude']
+      timestamp = data['received_at']
 
-      # create a dictionary with extracted data
+      node = Node.objects.get(node_id=device_id)
+
+      # create a dictionary containing the extracted data
       soil_data = {
+        'soil_data_id': soil_data_id,
+        'node': node,
         'moisture': moisture,
-        'device_id': device_id,
         'latitude': latitude,
-        'longitude': longitude
+        'longitude': longitude,
+        'timestamp': timestamp
       }
+
+      print(soil_data)
 
       # create a serializer instance with the extracted data
       serializer = SoilDataSerializer(data=soil_data)

@@ -26,8 +26,6 @@ class Central(models.Model):
 class Node(models.Model):
   node_id = models.CharField(max_length=150, primary_key=True)
   central = models.ForeignKey(Central, on_delete=CASCADE)
-  latitude = models.FloatField(default=0.0)
-  longitude = models.FloatField(default=0.0)
 
   def __str__(self):
     return self.node_id
@@ -37,6 +35,8 @@ class SoilData(models.Model):
   node = models.ForeignKey(Node, on_delete=CASCADE)
   moisture = models.FloatField()
   timestamp = models.DateTimeField(default=timezone.now)
+  latitude = models.FloatField(default=0.0)
+  longitude = models.FloatField(default=0.0)
 
   def __str__(self):
     return self.soil_data_id
