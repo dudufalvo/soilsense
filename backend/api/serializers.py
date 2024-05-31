@@ -12,7 +12,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     token['username'] = user.username
     token['email'] = user.email
-    token['image'] = user.image
 
     return token
 
@@ -27,7 +26,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = CustomUser
-    fields = ('username', 'email', 'password', 'password2', 'image')
+    fields = ('username', 'email', 'password', 'password2')
 
   def validate(self, attrs):
     if attrs['password'] != attrs['password2']:
@@ -39,7 +38,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     user = CustomUser.objects.create(
       username=validated_data['username'],
       email=validated_data['email'],
-      image=validated_data['image']
     )
 
     user.set_password(validated_data['password'])
