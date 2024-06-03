@@ -20,8 +20,15 @@ class RegisterView(generics.CreateAPIView):
 @permission_classes([IsAuthenticated])
 def get_profile(request):
   user = request.user
+  
   serializer = UserSerializer(user)
   return JsonResponse(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def logout(request):
+  print("=====================================")
+  return JsonResponse({'message': 'Logout successful'}, status=200)
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
@@ -57,10 +64,11 @@ def central_list(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def users_central_list(request):
-  user = request.user
-  central = Central.objects.filter(user=user)
-  serializer = CentralSerializer(central, many=True)
-  return JsonResponse(serializer.data, safe=False)
+  if request.method == 'GET':
+    user = request.user
+    central = Central.objects.filter(user=user)
+    serializer = CentralSerializer(central, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -68,8 +76,9 @@ def create_central(request):
   user = request.user
   if request.method == 'POST':
     data = JSONParser().parse(request)
-    data['user'] = user.id
-    serializer = CentralSerializer(data=data)
+    data['data']['user'] = user.id
+    print(data['data'])
+    serializer = CentralSerializer(data=data['data'])
     if serializer.is_valid():
       serializer.save()
       return JsonResponse(serializer.data, status=201)
@@ -120,13 +129,14 @@ def central_node_list(request, pk):
   serializer = NodeSerializer(node, many=True)
   return JsonResponse(serializer.data, safe=False)
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_node(request):
   if request.method == 'POST':
     data = JSONParser().parse(request)
-    serializer = NodeSerializer(data=data)
+    print("============")
+    print(data)
+    serializer = NodeSerializer(data=data['data'])
     if serializer.is_valid():
       serializer.save()
       return JsonResponse(serializer.data, status=201)
@@ -159,6 +169,7 @@ def node_detail(request, pk):
     return JsonResponse({'message': 'Node was deleted successfully'}, status=204)
 
 @api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
 def soil_data_list(request):
   if request.method == 'GET':
     soil_data = SoilData.objects.all()
@@ -167,6 +178,7 @@ def soil_data_list(request):
   elif request.method == 'POST':
     try:
       data = JSONParser().parse(request)
+      print(data)
 
       # extract data from the request
       moisture = data['uplink_message']['decoded_payload']['moisture']
@@ -199,6 +211,14 @@ def soil_data_list(request):
       return JsonResponse(serializer.errors, status=400)
     except Exception as e:
       return JsonResponse({'message': str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def node_soil_data_list(request, pk):
+  node = Node.objects.get(pk=pk)
+  soil_data = SoilData.objects.filter(node=node)
+  serializer = SoilDataSerializer(soil_data, many=True)
+  return JsonResponse(serializer.data, safe=False)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def soil_data_detail(request, pk):

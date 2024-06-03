@@ -6,10 +6,12 @@ import Home from 'pages/Home'
 import Account from 'pages/Account'
 
 import { PrivateRoute, NotAuthenticatedRoute } from 'utils/routes'
-import { UserProvider } from './contexts/userContext'
+import { UserProvider } from 'contexts/userContext'
 import { Navbar } from './components/Navbar'
 import { Outlet } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
+import CreateCentral from 'pages/CreateCentral'
+import Centrals from 'pages/Centrals'
 
 const App = () => {
   return (
@@ -33,6 +35,8 @@ const App = () => {
             <Route path='*' element={<Navigate to='/' />} />
             <Route path='/' element={<Home />} />
             <Route path='/account' element={<Account />} />
+            <Route path='/new-central' element={<CreateCentral />} />
+            <Route path='/my-centrals' element={<Centrals />} />
           </Route>
         </Route>
       </Routes>

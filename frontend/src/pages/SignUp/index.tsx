@@ -20,9 +20,8 @@ type SignUpRequestType = {
   last_name: string;
   email: string;
   password: string;
-  phone_number: string;
-  nif: string;
-  role: string;
+  password2?: string | undefined;
+  username: string;
 }
 
 const SignUp = () => {
@@ -33,25 +32,23 @@ const SignUp = () => {
   })
 
   const signUpUser = async (data: SignUpType) => {
-
     const signUpData: SignUpRequestType = {
-
       first_name: data.first_name,
       last_name: data.last_name,
       email: data.email,
+      username: data.username,
       password: data.password,
-      phone_number: data.phone_number,
-      nif: data.nif,
-      role: 'regular'
+      password2: data.password2
     }
 
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/client/register`, { data : signUpData }, { headers: { 'Content-Type': 'application/json' } })
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/client/register`, signUpData, { headers: { 'Content-Type': 'application/json' } })
       .then(response => {
-        localStorage.setItem('token', response.data.access_token)
+        localStorage.setItem('token', response.data.access)
         toast.success('Signed up successfully')
         navigate('/')
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error)
         toast.error('Failed to sign up')
       })
   }
@@ -65,9 +62,9 @@ const SignUp = () => {
           <InputText type="text" id="email" name="email" placeholder="Enter your e-mail" label="E-mail" isRequired={true} />
         </div>
         <div className={styles.signupContentInputs}>
+          <InputText id="username" name="username" placeholder="Enter your username" label="Username" isRequired={true} />
           <InputPassword id="password" name="password" placeholder="Create a password" label="Password" isRequired={true} />
-          <InputText type="number" id="phone_number" name="phone_number" placeholder="Enter your phone number" label="Phone Number" isRequired={true} />
-          <InputText type="number" id="nif" name="nif" placeholder="Enter your NIF" label="NIF" isRequired={true} />
+          <InputPassword id="password2" name="password2" placeholder="Confirm password" label="Confirm Password" isRequired={true} />
         </div>
       </form>
     </AuthTemplate>

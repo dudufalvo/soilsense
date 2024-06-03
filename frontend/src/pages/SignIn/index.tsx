@@ -25,9 +25,9 @@ const SignIn = () => {
   })
 
   const signInUser = async (data: SignInType) => {
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/client/login`, { data })
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/client/login`, data)
       .then(response => {
-        localStorage.setItem('token', response.data.access_token)
+        localStorage.setItem('token', response.data.access)
         toast.success('Logged in successfully')
         navigate('/')
       })
@@ -40,7 +40,7 @@ const SignIn = () => {
     <AuthTemplate type='sign-in' methods={methods} handleAuth={methods.handleSubmit(signInUser)}>
       <form className={styles.signinContentMiddle}>
         <div className={styles.signinInputs}>
-          <InputText label="E-mail" type="text" name="email" id="email" placeholder="Enter your email" isRequired={true} />
+          <InputText label="Username" type="text" name="username" id="username" placeholder="Enter your username" isRequired={true} />
           <InputPassword id="password" name="password" placeholder="Enter your password" label="Password" isRequired={true} />
         </div>
 
