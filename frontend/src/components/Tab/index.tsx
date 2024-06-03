@@ -25,6 +25,8 @@ const Tabs = ({ tabs }: TabsProps) => {
   const handleTabClick = (tab: TabType) => {
     setSearchParams({ tab: turnKebabCase(tab.title) })
     setSelectedTab(tab)
+    /* refresh windown */
+    window.location.reload()
   }
 
   React.useEffect(() => {

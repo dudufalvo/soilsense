@@ -8,16 +8,14 @@ type UserType = {
   first_name: string;
   last_name: string;
   email: string;
-  phone_number: string;
-  nif: string;
-  role: string;
+  username: string;
 }
 
 type ProfileFormType = {
   first_name: string;
   last_name: string;
   email: string;
-  phone_number: string;
+  username: string;
 };
 
 type ContextType = {
@@ -25,11 +23,11 @@ type ContextType = {
   updateUserProfile: (params?: ProfileFormType | undefined) => void;
 }
 
-const UserContext = createContext<ContextType>({ user: { first_name: '', last_name: '', email: '', phone_number: '', nif: '', role: '' }, updateUserProfile: () => { } })
+const UserContext = createContext<ContextType>({ user: { first_name: '', last_name: '', email: '', username: '' }, updateUserProfile: () => { } })
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { data, doRequest: getUser } = useRequest(api.getUser, {
-    onError: () => localStorage.removeItem('token')
+    onError: () => localStorage.removeItem('token'),
   })
 
   const { doRequest: updateUserProfile } = useRequest<ProfileFormType>(api.updateUser, {
@@ -46,7 +44,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   return (
-    <UserContext.Provider value={{ user: data?.user, updateUserProfile }}>
+    <UserContext.Provider value={{ user: data, updateUserProfile }}>
       {children}
     </UserContext.Provider >
   )

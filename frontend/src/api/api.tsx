@@ -4,7 +4,7 @@ type ProfileFormType = {
   first_name: string;
   last_name: string;
   email: string;
-  phone_number: string;
+  username: string;
 }
 
 type PrivacyFormType = {
@@ -38,10 +38,10 @@ const api = {
     return axiosInstance.get('/client')
   },
   updateUser(data: ProfileFormType) {
-    return axiosInstance.put('/client', { data: data })
+    return axiosInstance.put('/client/update', { data })
   },
   updateUserPassword(data: PrivacyFormType) {
-    return axiosInstance.put('/client/password', { data: data })
+    return axiosInstance.put('/client/password', { data })
   }
 }
 

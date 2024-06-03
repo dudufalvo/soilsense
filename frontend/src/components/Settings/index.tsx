@@ -10,7 +10,6 @@ import axios from 'axios'
 import Button from 'components/Button'
 import InputPassword from 'components/Form/InputPassword'
 import InputText from 'components/Form/InputText'
-import InputFile from 'components/InputFile'
 import Separator from 'components/Separator'
 import toast from 'utils/toast'
 
@@ -18,7 +17,7 @@ type ProfileFormType = {
   first_name: string;
   last_name: string;
   email: string;
-  phone_number: string;
+  username: string;
 };
 
 type PrivacyFormType = {
@@ -48,7 +47,7 @@ const Settings = () => {
       first_name: data.first_name,
       last_name: data.last_name,
       email: data.email,
-      phone_number: data.phone_number
+      username: data.username,
     }
 
     updateUserProfile(updatedData)
@@ -69,14 +68,11 @@ const Settings = () => {
       <h2>My Profile</h2>
       <FormProvider {...profileMethods}>
         <form className={styles.settings}>
-          {/* <div className={styles.profileLeft}>
-            <InputFile label='Profile Photo' name='image' />
-          </div> */}
           <div className={styles.profileRight}>
             <InputText id='first_name' name='first_name' label='First Name' placeholder='Insert your first name' />
             <InputText id='last_name' name='last_name' label='Last Name' placeholder='Insert your last name' />
+            <InputText id='username' name='username' label='Username' placeholder='Insert your username' />
             <InputText id='email' name='email' label='Email' placeholder='Insert your email' isDisabled />
-            <InputText id='phone_number' name='phone_number' label='Phone Number' placeholder='Insert your phone number' />
             <Button type='submit' variant='filled' fullWidth handle={profileMethods.handleSubmit(handleProfileUpdate)}>Save</Button>
           </div>
         </form>

@@ -82,7 +82,6 @@ const Home = () => {
 
   return (
     <div className='main'>
-      <Navbar />
       <div className='table'>
         <span>Latest Soil Data</span>
         <div className='flex'>
