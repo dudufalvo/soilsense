@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
+  permission_classes = (AllowAny,)
   serializer_class = MyTokenObtainPairSerializer
 
 class RegisterView(generics.CreateAPIView):
@@ -40,6 +41,7 @@ def update_profile(request):
   return JsonResponse(serializer.data, safe=False)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def list_users(request):
   users = CustomUser.objects.all()
   serializer = ListUsersSerializer(users, many=True)
