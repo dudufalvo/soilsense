@@ -184,10 +184,10 @@ def soil_data_list(request):
       all_moisture = data['uplink_message']['decoded_payload']['sensorData']
       
       for i in range(len(all_moisture)):
+        moisture = all_moisture[i]
         if moisture == "Offline":
           continue
 
-        moisture = all_moisture[i]
         sensor_id = i
         device_id = data['end_device_ids']['device_id']
         latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
@@ -219,6 +219,7 @@ def soil_data_list(request):
           return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
     except Exception as e:
+      print(e)
       return JsonResponse({'message': str(e)}, status=400)
 
 @api_view(['GET'])
