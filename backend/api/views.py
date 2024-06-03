@@ -181,34 +181,43 @@ def soil_data_list(request):
       print(data)
 
       # extract data from the request
-      moisture = data['uplink_message']['decoded_payload']['moisture']
-      device_id = data['end_device_ids']['device_id']
-      latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
-      longitude = data['uplink_message']['rx_metadata'][0]['location']['longitude']
-      timestamp = data['received_at']
-      battery = data['uplink_message']['decoded_payload']['battery']
-
-      node = Node.objects.get(node_id=device_id)
-
-      # create a dictionary containing the extracted data
-      soil_data = {
-        'node': node,
-        'moisture': moisture,
-        'latitude': latitude,
-        'longitude': longitude,
-        'timestamp': timestamp,
-        'battery': battery
-      }
-
-      # create a serializer instance with the extracted data
-      serializer = SoilDataSerializer(data=soil_data)
+      all_moisture = data['uplink_message']['decoded_payload']['sensorData']
       
-      # check if the serializer is valid
-      if serializer.is_valid():
-        # save the data to the database
-        serializer.save()
-        return JsonResponse(serializer.data, status=201)
-      return JsonResponse(serializer.errors, status=400)
+      for i in range(len(all_moisture)):
+        if moisture == "Offline":
+          continue
+
+        moisture = all_moisture[i]
+        sensor_id = i
+        device_id = data['end_device_ids']['device_id']
+        latitude = data['uplink_message']['rx_metadata'][0]['location']['latitude']
+        longitude = data['uplink_message']['rx_metadata'][0]['location']['longitude']
+        timestamp = data['received_at']
+        #battery = data['uplink_message']['decoded_payload']['battery']
+        battery = 100
+
+        node = Node.objects.get(node_id=device_id)
+
+        # create a dictionary containing the extracted data
+        soil_data = {
+          'node': node,
+          'moisture': moisture,
+          'sensor_id': sensor_id,
+          'latitude': latitude,
+          'longitude': longitude,
+          'timestamp': timestamp,
+          'battery': battery
+        }
+
+        # create a serializer instance with the extracted data
+        serializer = SoilDataSerializer(data=soil_data)
+        
+        # check if the serializer is valid
+        if serializer.is_valid():
+          # save the data to the database
+          serializer.save()
+          return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
     except Exception as e:
       return JsonResponse({'message': str(e)}, status=400)
 

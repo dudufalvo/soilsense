@@ -34,6 +34,7 @@ class SoilData(models.Model):
   soil_data_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   node = models.ForeignKey(Node, on_delete=CASCADE)
   moisture = models.FloatField()
+  sensor_id = models.IntegerField()
   timestamp = models.DateTimeField(default=timezone.now)
   latitude = models.FloatField(default=0.0)
   longitude = models.FloatField(default=0.0)
