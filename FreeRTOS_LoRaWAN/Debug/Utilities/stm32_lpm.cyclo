@@ -1,6 +1,0 @@
-/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Utilities/lpm/tiny_lpm/stm32_lpm.c:122:6:UTIL_LPM_Init	1
-/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Utilities/lpm/tiny_lpm/stm32_lpm.c:129:6:UTIL_LPM_DeInit	1
-/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Utilities/lpm/tiny_lpm/stm32_lpm.c:133:6:UTIL_LPM_SetStopMode	3
-/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Utilities/lpm/tiny_lpm/stm32_lpm.c:158:6:UTIL_LPM_SetOffMode	3
-/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Utilities/lpm/tiny_lpm/stm32_lpm.c:183:17:UTIL_LPM_GetMode	3
-/Users/gabrielsilva/UC/3Ano/2 Semestre/Projeto 2/LoRaWan-E5-Node-main/Utilities/lpm/tiny_lpm/stm32_lpm.c:216:6:UTIL_LPM_EnterLowPower	3
