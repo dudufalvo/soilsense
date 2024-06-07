@@ -1,7 +1,6 @@
 import './home.css'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Navbar } from '../../components/Navbar'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,6 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { LineChart } from 'components/LineChart';
+import TablePagination from '@mui/material/TablePagination';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -56,6 +56,17 @@ const converTimeStamp = (timestamp: string) => {
 
 const Home = () => {
   const [data, setData] = useState<SoilDataType[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   useEffect(() => {
     axios.get('http://soilsense.pythonanywhere.com/api/soil-data')
@@ -71,6 +82,7 @@ const Home = () => {
           node: item.node
         }
       });
+      soilData.reverse();
       setData(soilData);
     }
     )
@@ -86,33 +98,46 @@ const Home = () => {
         <span>Latest Soil Data</span>
         <div className='flex'>
           <div><LineChart/></div>
-        
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Soil Data (ID)</StyledTableCell>
-                  <StyledTableCell align="right">Moisture</StyledTableCell>
-                  <StyledTableCell align="right">Date</StyledTableCell>
-                  <StyledTableCell align="right">Time</StyledTableCell>
-                  <StyledTableCell align="right">Node (ID)</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.map((row) => (
-                  <StyledTableRow key={row.soil_data_id}>
-                    <StyledTableCell component="th" scope="row">
-                      {row.soil_data_id}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">{row.moisture}</StyledTableCell>
-                    <StyledTableCell align="right">{row.date}</StyledTableCell>
-                    <StyledTableCell align="right">{row.time}</StyledTableCell>
-                    <StyledTableCell align="right">{row.node}</StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+
+          <>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Soil Data (ID)</StyledTableCell>
+                    <StyledTableCell align="right">Moisture</StyledTableCell>
+                    <StyledTableCell align="right">Date</StyledTableCell>
+                    <StyledTableCell align="right">Time</StyledTableCell>
+                    <StyledTableCell align="right">Node (ID)</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <StyledTableRow key={row.soil_data_id}>
+                      <StyledTableCell component="th" scope="row">
+                        {row.soil_data_id}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">{row.moisture}</StyledTableCell>
+                      <StyledTableCell align="right">{row.date}</StyledTableCell>
+                      <StyledTableCell align="right">{row.time}</StyledTableCell>
+                      <StyledTableCell align="right">{row.node}</StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={data.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
         </div>
       </div>
     </div>

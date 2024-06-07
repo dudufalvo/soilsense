@@ -7,6 +7,8 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from django.utils import timezone
+from django.db.models import Avg
 
 class MyTokenObtainPairView(TokenObtainPairView):
   permission_classes = (AllowAny,)
@@ -252,3 +254,115 @@ def soil_data_detail(request, pk):
   elif request.method == 'DELETE':
     soil_data.delete()
     return JsonResponse({'message': 'Soil data was deleted successfully'}, status=204)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+# function to get the average moisture of a node of the hour, day, week, month, year
+def node_average_moisture(request, pk, period):
+  node = Node.objects.get(pk=pk)
+  soil_data = SoilData.objects.filter(node=node)
+  
+  # get the current date and time
+  current_date = timezone.now()
+  
+  # get the current year
+  current_year = current_date.year
+  
+  # get the current month
+  current_month = current_date.month
+  
+  # get the current day
+  current_day = current_date.day
+  
+  # get the current hour
+  current_hour = current_date.hour
+  
+  # get the current week
+  current_week = current_date.isocalendar()[1]
+  
+  # get the average moisture of the node
+  if period == 'hour':
+    soil_data = soil_data.filter(timestamp__hour=current_hour)
+
+    # get the avarege moisture of the node splitting the hour into 6 minutes intervals
+    # the average moisture of the node is calculated for each interval
+    # the return should be a list containing the average moisture of the node for each interval and the interval like ['00:00 - 00:06', '00:06 - 00:12', '00:12 - 00:18', '00:18 - 00:24', '00:24 - 00:30', '00:30 - 00:36', '00:36 - 00:42', '00:42 - 00:48', '00:48 - 00:54', '00:54 - 01:00']
+    
+    # get the average moisture of the node for each interval
+    average_moisture = []
+    for i in range(0, 60, 6):
+      soil_data_interval = soil_data.filter(timestamp__minute__range=[i, i+6])
+      average_moisture_interval = soil_data_interval.aggregate(Avg('moisture'))['moisture__avg']
+      average_moisture.append(average_moisture_interval)
+      
+    # get the interval for each average moisture
+    interval = []
+    for i in range(0, 60, 6):
+      interval.append(f'{str(i).zfill(2)}:{str(i+6).zfill(2)} - {str(i+6).zfill(2)}:{str(i+12).zfill(2)}')
+      
+    return JsonResponse({'average_moisture': average_moisture, 'interval': interval}, safe=False)
+  elif period == 'day':
+    
+    # get the average moisture of the node for each hour of the day
+    average_moisture = []
+    for i in range(24):
+      soil_data_hour = soil_data.filter(timestamp__hour=i)
+      average_moisture_hour = soil_data_hour.aggregate(Avg('moisture'))['moisture__avg']
+      average_moisture.append(average_moisture_hour)
+      
+    # get the hour for each average moisture
+    hour = []
+    for i in range(24):
+      hour.append(str(i).zfill(2))
+      
+    return JsonResponse({'average_moisture': average_moisture, 'hour': hour}, safe=False)
+  elif period == 'week':
+    
+    # get the average moisture of the node for each day of the week
+    average_moisture = []
+    for i in range(1, 8):
+      soil_data_day = soil_data.filter(timestamp__week_day=i)
+      average_moisture_day = soil_data_day.aggregate(Avg('moisture'))['moisture__avg']
+      average_moisture.append(average_moisture_day)
+      
+    # get the day for each average moisture
+    day = []
+    for i in range(1, 8):
+      day.append(str(i))
+      
+    return JsonResponse({'average_moisture': average_moisture, 'day': day}, safe=False)
+  
+  elif period == 'month':
+    
+    # get the average moisture of the node for each day of the month
+    average_moisture = []
+    for i in range(1, 32):
+      soil_data_day = soil_data.filter(timestamp__day=i)
+      average_moisture_day = soil_data_day.aggregate(Avg('moisture'))['moisture__avg']
+      average_moisture.append(average_moisture_day)
+      
+    # get the day for each average moisture
+    day = []
+    for i in range(1, 32):
+      day.append(str(i))
+      
+    return JsonResponse({'average_moisture': average_moisture, 'day': day}, safe=False)
+  
+  elif period == 'year':
+      
+      # get the average moisture of the node for each month of the year
+      average_moisture = []
+      for i in range(1, 13):
+        soil_data_month = soil_data.filter(timestamp__month=i)
+        average_moisture_month = soil_data_month.aggregate(Avg('moisture'))['moisture__avg']
+        average_moisture.append(average_moisture_month)
+        
+      # get the month for each average moisture
+      month = []
+      for i in range(1, 13):
+        month.append(str(i))
+        
+      return JsonResponse({'average_moisture': average_moisture, 'month': month}, safe=False)
+    
+  else:
+    return JsonResponse({'message': 'Invalid period'}, status=400)

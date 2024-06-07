@@ -29,7 +29,7 @@ export type InputFormType = {
 }
 
 export type SignInType = {
-  username: string,
+  email: string,
   password: string,
   rememberMe: boolean,
 }
