@@ -27,4 +27,6 @@ urlpatterns = [
   path('soil-data', views.soil_data_list),
   path('soil-data/node/<str:pk>/', views.node_soil_data_list),
   path('soil-data/<str:pk>', views.soil_data_detail),
+  
+  path('node-stats/<str:pk>/<str:period>', views.node_average_moisture),
 ]

@@ -264,30 +264,13 @@ def node_average_moisture(request, pk, period):
   
   # get the current date and time
   current_date = timezone.now()
-  
-  # get the current year
-  current_year = current_date.year
-  
-  # get the current month
-  current_month = current_date.month
-  
-  # get the current day
-  current_day = current_date.day
-  
+
   # get the current hour
   current_hour = current_date.hour
-  
-  # get the current week
-  current_week = current_date.isocalendar()[1]
-  
-  # get the average moisture of the node
+
   if period == 'hour':
     soil_data = soil_data.filter(timestamp__hour=current_hour)
 
-    # get the avarege moisture of the node splitting the hour into 6 minutes intervals
-    # the average moisture of the node is calculated for each interval
-    # the return should be a list containing the average moisture of the node for each interval and the interval like ['00:00 - 00:06', '00:06 - 00:12', '00:12 - 00:18', '00:18 - 00:24', '00:24 - 00:30', '00:30 - 00:36', '00:36 - 00:42', '00:42 - 00:48', '00:48 - 00:54', '00:54 - 01:00']
-    
     # get the average moisture of the node for each interval
     average_moisture = []
     for i in range(0, 60, 6):
@@ -300,7 +283,7 @@ def node_average_moisture(request, pk, period):
     for i in range(0, 60, 6):
       interval.append(f'{str(i).zfill(2)}:{str(i+6).zfill(2)} - {str(i+6).zfill(2)}:{str(i+12).zfill(2)}')
       
-    return JsonResponse({'average_moisture': average_moisture, 'interval': interval}, safe=False)
+    return JsonResponse({'average_moisture': average_moisture, 'period': interval}, safe=False)
   elif period == 'day':
     
     # get the average moisture of the node for each hour of the day
@@ -315,7 +298,7 @@ def node_average_moisture(request, pk, period):
     for i in range(24):
       hour.append(str(i).zfill(2))
       
-    return JsonResponse({'average_moisture': average_moisture, 'hour': hour}, safe=False)
+    return JsonResponse({'average_moisture': average_moisture, 'period': hour}, safe=False)
   elif period == 'week':
     
     # get the average moisture of the node for each day of the week
@@ -330,7 +313,7 @@ def node_average_moisture(request, pk, period):
     for i in range(1, 8):
       day.append(str(i))
       
-    return JsonResponse({'average_moisture': average_moisture, 'day': day}, safe=False)
+    return JsonResponse({'average_moisture': average_moisture, 'period': day}, safe=False)
   
   elif period == 'month':
     
@@ -346,7 +329,7 @@ def node_average_moisture(request, pk, period):
     for i in range(1, 32):
       day.append(str(i))
       
-    return JsonResponse({'average_moisture': average_moisture, 'day': day}, safe=False)
+    return JsonResponse({'average_moisture': average_moisture, 'period': day}, safe=False)
   
   elif period == 'year':
       
@@ -362,7 +345,7 @@ def node_average_moisture(request, pk, period):
       for i in range(1, 13):
         month.append(str(i))
         
-      return JsonResponse({'average_moisture': average_moisture, 'month': month}, safe=False)
+      return JsonResponse({'average_moisture': average_moisture, 'period': month}, safe=False)
     
   else:
     return JsonResponse({'message': 'Invalid period'}, status=400)
