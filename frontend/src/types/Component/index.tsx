@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { ToastTransition } from 'react-toastify'
-import type { PlaceResponseType, AddPlaceType } from 'types/Place'
+import { ToastIcon } from 'react-toastify/dist/types'
 import type { UserDataType } from 'types/User'
 
 export type ButtonType = {
@@ -39,9 +39,9 @@ export type ToastType = {
   pauseOnHover?: boolean,
   draggable?: boolean,
   progress?: undefined | number | string,
-  closeButton?: ReactNode | boolean,
+  closeButton?: boolean,
   theme?: 'dark' | 'light' | 'colored',
-  icon?: ReactNode | boolean,
+  icon?: ToastIcon,
   pauseOnFocusLoss?: boolean,
   delay?: number,
   type?: 'default' | 'success' | 'info' | 'warning' | 'error',
@@ -110,33 +110,10 @@ export type ModalAddDateType = {
   }
 }
 
-export type VoteType = {
-  vote: {
-    id: string,
-    votable_type: AddPlaceType | ModalAddDateType
-  }
-}
-
 export type DateOptionResponseType = {
   data: {
     dateoption: DateOptionType
   }
-}
-
-export type PlaceOptionResponseType = {
-  data: {
-    placeoption: PlaceOptionType
-  }
-}
-
-export type PlaceOptionType = {
-  id: string,
-  has_voted: boolean,
-  place: PlaceResponseType,
-  users: {
-    id: string,
-    image_url: string
-  }[]
 }
 
 export type DateOptionType = {
@@ -147,14 +124,6 @@ export type DateOptionType = {
     id: string,
     image_url: string
   }[]
-}
-
-export type DataType = {
-  id: string,
-  name: string,
-  has_permission: boolean,
-  places: PlaceOptionType[],
-  dates: DateOptionType[]
 }
 
 export type RequestType<T> = {

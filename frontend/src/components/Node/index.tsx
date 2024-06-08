@@ -24,7 +24,6 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
 import SelectDropdown from 'components/SelectDropdown';
 import Button from 'components/Button';
 
@@ -116,16 +115,6 @@ type FetchDataType = {
   node: string
 }
 
-type StatsType = {
-  average_moisture: number[],
-  period: string[]
-}
-
-type StatsDataType = {
-  labels: string[],
-  datasets: any[]
-}
-
 export type DropdownOptionType = {
   value: string,
   image?: string | React.ReactNode,
@@ -141,7 +130,7 @@ const converTimeStamp = (timestamp: string) => {
   return {date, time};
 }
 
-const Node = ({ node_id, central }: NodeRequestType) => {
+const Node = ({ node_id }: NodeRequestType) => {
   const [data, setData] = useState<SoilDataType[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -149,6 +138,7 @@ const Node = ({ node_id, central }: NodeRequestType) => {
   const [selectedDate, setSelectedDate] = useState<DropdownOptionType>({ label: 'Hour', value: 'hour' });
 
   const handleChangePage = (event: unknown, newPage: number) => {
+    console.log(event);
     setPage(newPage);
   };
 

@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 
 import styles from './centrals.module.scss'
 
-import Settings from 'components/Settings'
 import Tabs from 'components/Tab'
 import CentralForm from 'components/CentralForm'
 

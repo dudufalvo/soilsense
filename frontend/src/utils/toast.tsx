@@ -13,7 +13,7 @@ const defaultToastOptions: ToastType = {
   progress: undefined,
   closeButton: true,
   theme: 'colored',
-  icon: true,
+  icon: undefined,
   pauseOnFocusLoss: true,
   delay: 0,
   type: 'default',
