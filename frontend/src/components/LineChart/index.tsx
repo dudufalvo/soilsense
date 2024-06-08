@@ -1,3 +1,8 @@
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { MultiValue, SingleValue } from 'react-select';
+import SelectDropdown from 'components/SelectDropdown';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -80,6 +85,66 @@ export const data = {
   ],
 };
 
+
+export type DropdownOptionType = {
+  value: string,
+  image?: string | React.ReactNode,
+  label: string,
+  id?: number,
+  handle?: () => void
+}
+
 export const LineChart = () => {
-  return <Line options={options} data={data} />;
+  const [stats, setStats] = useState<any>();
+  const [selectedDate, setSelectedDate] = useState<DropdownOptionType>({ label: 'Hour', value: 'hour' });
+
+  const handleSelectedDate = (value: SingleValue<DropdownOptionType> | MultiValue<DropdownOptionType>) => {
+    if (!value) return
+    const filteredDate = value as DropdownOptionType
+
+    setSelectedDate(filteredDate)
+  }
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/central-stats/e081f162-6a3a-4982-85f1-a54a152c965b/${selectedDate?.value}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+
+      const stats = {
+        labels: data.period.reverse(),
+        datasets: [
+          {
+            label: 'Average Moisture',
+            data: data.average_moisture.reverse().map((item: number) => item > 550 ? 550 : item),
+            borderColor: 'rgb(135, 178, 114)',
+            backgroundColor: 'rgba(135, 178, 114, 0.5)',
+            yAxisID: 'y',
+          }
+        ],
+      }
+
+      setStats(stats);
+    }
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+  , [selectedDate]);
+
+  const filters = [
+    { label: 'Hour', value: 'hour' },
+    { label: 'Day', value: 'day' },
+    { label: 'Week', value: 'week' },
+    { label: 'Month', value: 'month' },
+    { label: 'Year', value: 'year' }
+  ]
+
+  return (
+    <div>
+      <SelectDropdown type='select' sendOptionsToParent={handleSelectedDate} /* defaultOption={dataOptions[0]} */ options={filters} label='Filter' name='date' />
+      {stats && <div><Line data={stats} options={options} /></div>}
+    </div>
+  );
 }

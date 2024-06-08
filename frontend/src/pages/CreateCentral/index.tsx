@@ -62,7 +62,6 @@ const CreateCentral = () => {
     axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/central/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       const data = response.data;
-      console.log(data)
       setData(data);
     }
     )
@@ -77,7 +76,6 @@ const CreateCentral = () => {
   })
 
   const handleSendMessage = (data: MessageType) => {
-    console.log(data)
     axios.post(`${import.meta.env.VITE_API_BASE_URL}/central/create`, { data }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}})
       .then(() => {
         toast.success('Message sent successfully')

@@ -32,13 +32,10 @@ const validationSchema = yup.object().shape({
 const CentralForm = ({ central_id }: CentralFormProps) => {
   const [data, setData] = useState<NodeRequestType[]>([]);
 
-  console.log(central_id)
-
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_BASE_URL}/node/central/${central_id}/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       const data = response.data;
-      console.log(data)
       setData(data);
     }
     )

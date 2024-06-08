@@ -95,7 +95,7 @@ const Home = () => {
   return (
     <div className='main'>
       <div className='table'>
-        <span>Latest Soil Data</span>
+        <span>Dashboard</span>
         <div className='flex'>
           <div><LineChart/></div>
 

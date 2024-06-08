@@ -11,6 +11,62 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react'
 import TablePagination from '@mui/material/TablePagination';
+import { MultiValue, SingleValue } from 'react-select';
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { faker } from '@faker-js/faker';
+import SelectDropdown from 'components/SelectDropdown';
+import Button from 'components/Button';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export const options = {
+  responsive: true,
+  interaction: {
+    mode: 'index' as const,
+    intersect: false,
+  },
+  stacked: false,
+  plugins: {
+    title: {
+      display: true,
+      text: 'Humidity Levels',
+    },
+  },
+  scales: {
+    y: {
+      type: 'linear' as const,
+      display: true,
+      position: 'left' as const,
+    },
+    y1: {
+      type: 'linear' as const,
+      display: true,
+      position: 'right' as const,
+      grid: {
+        drawOnChartArea: false,
+      },
+    },
+  },
+};
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,6 +116,24 @@ type FetchDataType = {
   node: string
 }
 
+type StatsType = {
+  average_moisture: number[],
+  period: string[]
+}
+
+type StatsDataType = {
+  labels: string[],
+  datasets: any[]
+}
+
+export type DropdownOptionType = {
+  value: string,
+  image?: string | React.ReactNode,
+  label: string,
+  id?: number,
+  handle?: () => void
+}
+
 const converTimeStamp = (timestamp: string) => {
   // split time stamp in date and time
   const date = timestamp.split('T')[0];
@@ -70,11 +144,31 @@ const converTimeStamp = (timestamp: string) => {
 const Node = ({ node_id, central }: NodeRequestType) => {
   const [data, setData] = useState<SoilDataType[]>([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [stats, setStats] = useState<any>();
+  const [selectedDate, setSelectedDate] = useState<DropdownOptionType>({ label: 'Hour', value: 'hour' });
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
+
+  const handleIrrigation = () => {
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/node/irrigate/${node_id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }})
+    .then(() => {
+      toast.success('Irrigation started successfully');
+    })
+    .catch(() => {
+      toast.error('Failed to start irrigation');
+    });
+  }
+  
+
+  const handleSelectedDate = (value: SingleValue<DropdownOptionType> | MultiValue<DropdownOptionType>) => {
+    if (!value) return
+    const filteredDate = value as DropdownOptionType
+
+    setSelectedDate(filteredDate)
+  }
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
@@ -104,7 +198,6 @@ const Node = ({ node_id, central }: NodeRequestType) => {
 
       soilData.reverse();
 
-      console.log(data)
       setData(soilData);
     }
     )
@@ -114,52 +207,106 @@ const Node = ({ node_id, central }: NodeRequestType) => {
   }
   , []);
 
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/node-stats/${node_id}/${selectedDate?.value}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+
+      if (selectedDate?.value !== 'day') {
+        data.period.reverse();
+        data.average_moisture.reverse();
+      }
+
+      const stats = {
+        labels: data.period,
+        datasets: [
+          {
+            label: 'Average Moisture',
+            data: data.average_moisture.map((item: number) => item > 550 ? 550 : item),
+            borderColor: 'rgb(135, 178, 114)',
+            backgroundColor: 'rgba(135, 178, 114, 0.5)',
+            yAxisID: 'y',
+          }
+        ],
+      }
+
+      setStats(stats);
+    }
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+  , [selectedDate]);
+
+  const filters = [
+    { label: 'Hour', value: 'hour' },
+    { label: 'Day', value: 'day' },
+    { label: 'Week', value: 'week' },
+    { label: 'Month', value: 'month' },
+    { label: 'Year', value: 'year' }
+  ]
+
   return (
     <div className={styles.main}>
-      <h2>{`${node_id.toUpperCase()}`}</h2>
-      <TableContainer component={Paper} key={node_id}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Soil Data ID</StyledTableCell>
-              <StyledTableCell align="right">Sensor ID</StyledTableCell>
-              <StyledTableCell align="right">Date</StyledTableCell>
-              <StyledTableCell align="right">Time</StyledTableCell>
-              <StyledTableCell align="right">Latitude</StyledTableCell>
-              <StyledTableCell align="right">Longitude</StyledTableCell>
-              <StyledTableCell align="right">Battery</StyledTableCell>
-              <StyledTableCell align="right">Moisture</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row) => (
-              <StyledTableRow key={row.soil_data_id}>
-                <StyledTableCell component="th" scope="row">
-                  {row.soil_data_id}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.sensor_id}</StyledTableCell>
-                <StyledTableCell align="right">{row.date}</StyledTableCell>
-                <StyledTableCell align="right">{row.time}</StyledTableCell>
-                <StyledTableCell align="right">{row.latitude}</StyledTableCell>
-                <StyledTableCell align="right">{row.longitude}</StyledTableCell>
-                <StyledTableCell align="right">{row.battery}</StyledTableCell>
-                <StyledTableCell align="right">{row.moisture}</StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <div className={styles.flex2}>
+        <h2>{`${node_id.toUpperCase()}`}</h2>
+        <Button children={<span>Irrigate</span>} handle={handleIrrigation} />
+      </div>
+
+      <div className={styles.flex}>
+        <div>
+        <SelectDropdown type='select' sendOptionsToParent={handleSelectedDate} /* defaultOption={dataOptions[0]} */ options={filters} label='Filter' name='date' />
+        {stats && <div><Line data={stats} options={options} /></div>}
+        </div>
+
+      <>
+        <TableContainer component={Paper} key={node_id}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Soil Data ID</StyledTableCell>
+                <StyledTableCell align="right">Sensor ID</StyledTableCell>
+                <StyledTableCell align="right">Date</StyledTableCell>
+                <StyledTableCell align="right">Time</StyledTableCell>
+                <StyledTableCell align="right">Latitude</StyledTableCell>
+                <StyledTableCell align="right">Longitude</StyledTableCell>
+                <StyledTableCell align="right">Battery</StyledTableCell>
+                <StyledTableCell align="right">Moisture</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <StyledTableRow key={row.soil_data_id}>
+                  <StyledTableCell component="th" scope="row">
+                    {row.soil_data_id}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{row.sensor_id}</StyledTableCell>
+                  <StyledTableCell align="right">{row.date}</StyledTableCell>
+                  <StyledTableCell align="right">{row.time}</StyledTableCell>
+                  <StyledTableCell align="right">{row.latitude}</StyledTableCell>
+                  <StyledTableCell align="right">{row.longitude}</StyledTableCell>
+                  <StyledTableCell align="right">{row.battery}</StyledTableCell>
+                  <StyledTableCell align="right">{row.moisture}</StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </>
+      </div>
     </div>
   )
 }

@@ -23,10 +23,12 @@ urlpatterns = [
   path('node/create', views.create_node, name='node-create'),
   path('node/central/<str:pk>/', views.central_node_list),
   path('node/<str:pk>', views.node_detail),
+  path('node/irrigate/<str:pk>', views.node_activate_irrigation),
 
   path('soil-data', views.soil_data_list),
   path('soil-data/node/<str:pk>/', views.node_soil_data_list),
   path('soil-data/<str:pk>', views.soil_data_detail),
   
   path('node-stats/<str:pk>/<str:period>', views.node_average_moisture),
+  path('central-stats/<str:pk>/<str:period>', views.central_modes_average_moisture),
 ]

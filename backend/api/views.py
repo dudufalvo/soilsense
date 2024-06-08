@@ -30,7 +30,6 @@ def get_profile(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def logout(request):
-  print("=====================================")
   return JsonResponse({'message': 'Logout successful'}, status=200)
 
 @api_view(['PUT'])
@@ -172,6 +171,11 @@ def node_detail(request, pk):
     node.delete()
     return JsonResponse({'message': 'Node was deleted successfully'}, status=204)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def node_activate_irrigation(request, pk):
+  return JsonResponse({'message': 'Irrigation activated successfully'}, status=200)
+
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def soil_data_list(request):
@@ -265,87 +269,83 @@ def node_average_moisture(request, pk, period):
   # get the current date and time
   current_date = timezone.now()
 
-  # get the current hour
-  current_hour = current_date.hour
-
   if period == 'hour':
-    soil_data = soil_data.filter(timestamp__hour=current_hour)
-
-    # get the average moisture of the node for each interval
+    # get the average moisture of the last 60 minutes divided in blocks of 5 minutes and return the average and the time block
     average_moisture = []
-    for i in range(0, 60, 6):
-      soil_data_interval = soil_data.filter(timestamp__minute__range=[i, i+6])
-      average_moisture_interval = soil_data_interval.aggregate(Avg('moisture'))['moisture__avg']
-      average_moisture.append(average_moisture_interval)
-      
-    # get the interval for each average moisture
-    interval = []
-    for i in range(0, 60, 6):
-      interval.append(f'{str(i).zfill(2)}:{str(i+6).zfill(2)} - {str(i+6).zfill(2)}:{str(i+12).zfill(2)}')
-      
-    return JsonResponse({'average_moisture': average_moisture, 'period': interval}, safe=False)
+    time_block = []
+    for i in range(12):
+      start_time = current_date - timezone.timedelta(minutes=(i+1)*5)
+      end_time = current_date - timezone.timedelta(minutes=i*5)
+      moisture = soil_data.filter(timestamp__range=(start_time, end_time)).aggregate(Avg('moisture'))
+      average_moisture.append(moisture['moisture__avg'])
+      time_block.append(start_time.strftime("%H:%M") + " - " + end_time.strftime("%H:%M"))
+    return JsonResponse({'average_moisture': average_moisture, 'period': time_block})
   elif period == 'day':
-    
-    # get the average moisture of the node for each hour of the day
+    # get the average moisture of the today divided in blocks of 1 hour and return the average and the time block
     average_moisture = []
+    time_block = []
     for i in range(24):
-      soil_data_hour = soil_data.filter(timestamp__hour=i)
-      average_moisture_hour = soil_data_hour.aggregate(Avg('moisture'))['moisture__avg']
-      average_moisture.append(average_moisture_hour)
-      
-    # get the hour for each average moisture
-    hour = []
-    for i in range(24):
-      hour.append(str(i).zfill(2))
-      
-    return JsonResponse({'average_moisture': average_moisture, 'period': hour}, safe=False)
+      # start time is the hour 0 of the current day
+      start_time = current_date.replace(hour=i, minute=0, second=0, microsecond=0)
+      end_time = current_date.replace(hour=i, minute=59, second=59, microsecond=59)
+      moisture = soil_data.filter(timestamp__range=(start_time, end_time)).aggregate(Avg('moisture'))
+      average_moisture.append(moisture['moisture__avg'])
+      time_block.append(start_time.strftime("%H:%M"))
+    return JsonResponse({'average_moisture': average_moisture, 'period': time_block})
   elif period == 'week':
-    
-    # get the average moisture of the node for each day of the week
+    # get the average moisture of the last 7 days divided in blocks of 1 day and return the average and the time block
     average_moisture = []
-    for i in range(1, 8):
-      soil_data_day = soil_data.filter(timestamp__week_day=i)
-      average_moisture_day = soil_data_day.aggregate(Avg('moisture'))['moisture__avg']
-      average_moisture.append(average_moisture_day)
-      
-    # get the day for each average moisture
-    day = []
-    for i in range(1, 8):
-      day.append(str(i))
-      
-    return JsonResponse({'average_moisture': average_moisture, 'period': day}, safe=False)
-  
+    time_block = []
+    for i in range(7):
+      start_time = current_date - timezone.timedelta(days=(i+1))
+      end_time = current_date - timezone.timedelta(days=i)
+      moisture = soil_data.filter(timestamp__range=(start_time, end_time)).aggregate(Avg('moisture'))
+      average_moisture.append(moisture['moisture__avg'])
+      time_block.append(start_time.strftime("%A"))
+    return JsonResponse({'average_moisture': average_moisture, 'period': time_block})
   elif period == 'month':
-    
-    # get the average moisture of the node for each day of the month
+    # get the average moisture of the last 30 days divided in blocks of 1 day and return the average and the time block
     average_moisture = []
-    for i in range(1, 32):
-      soil_data_day = soil_data.filter(timestamp__day=i)
-      average_moisture_day = soil_data_day.aggregate(Avg('moisture'))['moisture__avg']
-      average_moisture.append(average_moisture_day)
-      
-    # get the day for each average moisture
-    day = []
-    for i in range(1, 32):
-      day.append(str(i))
-      
-    return JsonResponse({'average_moisture': average_moisture, 'period': day}, safe=False)
-  
+    time_block = []
+    for i in range(30):
+      start_time = current_date - timezone.timedelta(days=(i+1))
+      end_time = current_date - timezone.timedelta(days=i)
+      moisture = soil_data.filter(timestamp__range=(start_time, end_time)).aggregate(Avg('moisture'))
+      average_moisture.append(moisture['moisture__avg'])
+      time_block.append(start_time.strftime("%d/%m"))
+    return JsonResponse({'average_moisture': average_moisture, 'period': time_block})
   elif period == 'year':
-      
-      # get the average moisture of the node for each month of the year
-      average_moisture = []
-      for i in range(1, 13):
-        soil_data_month = soil_data.filter(timestamp__month=i)
-        average_moisture_month = soil_data_month.aggregate(Avg('moisture'))['moisture__avg']
-        average_moisture.append(average_moisture_month)
-        
-      # get the month for each average moisture
-      month = []
-      for i in range(1, 13):
-        month.append(str(i))
-        
-      return JsonResponse({'average_moisture': average_moisture, 'period': month}, safe=False)
-    
+    # get the average moisture of the last 365 days divided in blocks of 1 month and return the average and the time block
+    average_moisture = []
+    time_block = []
+    for i in range(12):
+      start_time = current_date - timezone.timedelta(days=(i+1)*30)
+      end_time = current_date - timezone.timedelta(days=i*30)
+      moisture = soil_data.filter(timestamp__range=(start_time, end_time)).aggregate(Avg('moisture'))
+      average_moisture.append(moisture['moisture__avg'])
+      time_block.append(start_time.strftime("%B") + " " + start_time.strftime("%Y"))
+    return JsonResponse({'average_moisture': average_moisture, 'period': time_block})
   else:
     return JsonResponse({'message': 'Invalid period'}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def central_modes_average_moisture(request, pk, period):
+  central = Central.objects.get(pk=pk)
+  nodes = Node.objects.filter(central=central)
+  soil_data = SoilData.objects.filter(node__in=nodes)
+  
+  # get the current date and time
+  current_date = timezone.now()
+  
+  if period == 'hour':
+    # get the average moisture of the last 60 minutes divided in blocks of 5 minutes and return the average and the time block
+    average_moisture = []
+    time_block = []
+    for i in range(12):
+      start_time = current_date - timezone.timedelta(minutes=(i+1)*5)
+      end_time = current_date - timezone.timedelta(minutes=i*5)
+      moisture = soil_data.filter(timestamp__range=(start_time, end_time)).aggregate(Avg('moisture'))
+      average_moisture.append(moisture['moisture__avg'])
+      time_block.append(start_time.strftime("%H:%M") + " - " + end_time.strftime("%H:%M"))
+    return JsonResponse({'average_moisture': average_moisture, 'period': time_block})
