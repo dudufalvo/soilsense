@@ -29,6 +29,7 @@ const validationSchema = yup.object().shape({
   node_id: yup.string().required('Name is required')
 })
 
+
 const CentralForm = ({ central_id }: CentralFormProps) => {
   const [data, setData] = useState<NodeRequestType[]>([]);
 
