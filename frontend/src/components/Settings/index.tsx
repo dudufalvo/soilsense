@@ -54,7 +54,7 @@ const Settings = () => {
   }
 
   const hanleUpdateUserPassword = (data: PrivacyFormType) => {
-    axios.put(`${import.meta.env.VITE_API_BASE_URL}/client/password`, { data } ,{ headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.put(`${process.env.VITE_API_BASE_URL}/client/password`, { data } ,{ headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
       .then(() => {
         toast.success('Password updated successfully');
       })

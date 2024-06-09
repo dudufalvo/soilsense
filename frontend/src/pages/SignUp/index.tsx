@@ -41,7 +41,7 @@ const SignUp = () => {
       password2: data.password2
     }
 
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/client/register`, signUpData, { headers: { 'Content-Type': 'application/json' } })
+    axios.post(`${process.env.VITE_API_BASE_URL}/client/register`, signUpData, { headers: { 'Content-Type': 'application/json' } })
       .then(response => {
         localStorage.setItem('token', response.data.access)
         toast.success('Signed up successfully')

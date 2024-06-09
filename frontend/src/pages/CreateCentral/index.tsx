@@ -59,7 +59,7 @@ const CreateCentral = () => {
   const [data, setData] = useState<TableMessageType[]>([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/central/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.get(`${process.env.VITE_API_BASE_URL}/users/central/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       const data = response.data;
       setData(data);
@@ -76,7 +76,7 @@ const CreateCentral = () => {
   })
 
   const handleSendMessage = (data: MessageType) => {
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/central/create`, { data }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}})
+    axios.post(`${process.env.VITE_API_BASE_URL}/central/create`, { data }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}})
       .then(() => {
         toast.success('Message sent successfully')
       })

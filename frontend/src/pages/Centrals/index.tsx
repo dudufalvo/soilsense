@@ -18,7 +18,7 @@ const Centrals = () => {
   const [data, setData] = useState<TableMessageType[]>([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_BASE_URL}/users/central/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.get(`${process.env.VITE_API_BASE_URL}/users/central/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       const data = response.data;
       setData(data);

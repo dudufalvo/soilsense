@@ -33,7 +33,7 @@ const CentralForm = ({ central_id }: CentralFormProps) => {
   const [data, setData] = useState<NodeRequestType[]>([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_BASE_URL}/node/central/${central_id}/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.get(`${process.env.VITE_API_BASE_URL}/node/central/${central_id}/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       const data = response.data;
       setData(data);
@@ -56,7 +56,7 @@ const CentralForm = ({ central_id }: CentralFormProps) => {
       central: central_id
     }
 
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/node/create`, { data }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}})
+    axios.post(`${process.env.VITE_API_BASE_URL}/node/create`, { data }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}`}})
       .then(() => {
         toast.success('Node added successfully')
       })

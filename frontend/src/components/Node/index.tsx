@@ -143,7 +143,7 @@ const Node = ({ node_id }: NodeRequestType) => {
   };
 
   const handleIrrigation = () => {
-    axios.get(`${import.meta.env.VITE_API_BASE_URL}/node/irrigate/${node_id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }})
+    axios.get(`${process.env.VITE_API_BASE_URL}/node/irrigate/${node_id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }})
     .then(() => {
       toast.success('Irrigation started successfully');
     })
@@ -166,7 +166,7 @@ const Node = ({ node_id }: NodeRequestType) => {
   };
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_BASE_URL}/soil-data/node/${node_id}/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.get(`${process.env.VITE_API_BASE_URL}/soil-data/node/${node_id}/`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       const data = response.data;
 
@@ -198,7 +198,7 @@ const Node = ({ node_id }: NodeRequestType) => {
   , []);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_BASE_URL}/node-stats/${node_id}/${selectedDate?.value}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.get(`${process.env.VITE_API_BASE_URL}/node-stats/${node_id}/${selectedDate?.value}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       const data = response.data;
       console.log(data);

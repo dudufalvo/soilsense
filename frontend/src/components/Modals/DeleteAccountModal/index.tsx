@@ -27,7 +27,7 @@ const DeleteAccountModal = ({ isOpen, handleClosing }: DeleteAccountModalType) =
   })
 
   const handleDelete = (data: DeleteAccountFormType) => {
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/client/delete`, { data } ,{ headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.post(`${process.env.VITE_API_BASE_URL}/client/delete`, { data } ,{ headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
       .then(() => {
         toast.success('Account deleted successfully')
         handleClosing()

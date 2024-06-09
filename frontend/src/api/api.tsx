@@ -15,7 +15,7 @@ type PrivacyFormType = {
 
 const getAxiosInstance = (type: string) => {
   const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
+    baseURL: process.env.VITE_API_BASE_URL,
     timeout: 15000
   })
 

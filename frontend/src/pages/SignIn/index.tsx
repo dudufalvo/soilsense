@@ -29,7 +29,7 @@ const SignIn = () => {
 
 
     // get all users, filter by email and get user username
-    const users = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/users`)
+    const users = await axios.get(`${process.env.VITE_API_BASE_URL}/users`)
     const user = users.data.find((user: any) => user.email === userEmail)
 
     const postData = {
@@ -37,7 +37,7 @@ const SignIn = () => {
       password: data.password,
     }
 
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/client/login`, postData)
+    axios.post(`${process.env.VITE_API_BASE_URL}/client/login`, postData)
       .then(response => {
         localStorage.setItem('token', response.data.access)
         toast.success('Logged in successfully')

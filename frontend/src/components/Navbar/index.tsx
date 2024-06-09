@@ -16,7 +16,7 @@ export const Navbar = () => {
   const { user } = useUser()
 
   const handleLogout = () => {
-    axios.post(`${import.meta.env.VITE_API_BASE_URL}/client/logout`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.post(`${process.env.VITE_API_BASE_URL}/client/logout`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
       .then(() => {
         localStorage.removeItem('token')
         toast.success('Logged out successfully')

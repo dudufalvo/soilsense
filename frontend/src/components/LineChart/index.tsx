@@ -106,7 +106,7 @@ export const LineChart = () => {
   }
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_BASE_URL}/central-stats/e081f162-6a3a-4982-85f1-a54a152c965b/${selectedDate?.value}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+    axios.get(`${process.env.VITE_API_BASE_URL}/central-stats/e081f162-6a3a-4982-85f1-a54a152c965b/${selectedDate?.value}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
       const data = response.data;
       console.log(data);
