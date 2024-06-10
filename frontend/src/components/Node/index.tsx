@@ -213,7 +213,7 @@ const Node = ({ node_id }: NodeRequestType) => {
         datasets: [
           {
             label: 'Average Moisture',
-            data: data.average_moisture.map((item: number) => item > 550 ? 550 : item),
+            data: data?.average_moisture?.map((item: number) => item > 550 ? 550 : item),
             borderColor: 'rgb(135, 178, 114)',
             backgroundColor: 'rgba(135, 178, 114, 0.5)',
             yAxisID: 'y',
