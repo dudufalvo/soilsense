@@ -186,7 +186,7 @@ const Node = ({ node_id }: NodeRequestType) => {
       }
       );
 
-      soilData.reverse();
+      soilData?.reverse();
 
       setData(soilData);
     }
@@ -204,8 +204,8 @@ const Node = ({ node_id }: NodeRequestType) => {
       console.log(data);
 
       if (selectedDate?.value !== 'day') {
-        data.period.reverse();
-        data.average_moisture.reverse();
+        data?.period?.reverse();
+        data?.average_moisture?.reverse();
       }
 
       const stats = {

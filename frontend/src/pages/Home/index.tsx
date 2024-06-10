@@ -83,7 +83,7 @@ const Home = () => {
           node: item.node
         }
       });
-      soilData.reverse();
+      soilData?.reverse();
       setData(soilData);
     }
     )

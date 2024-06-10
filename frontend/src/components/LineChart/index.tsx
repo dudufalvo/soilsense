@@ -112,7 +112,7 @@ export const LineChart = () => {
       console.log(data);
 
       const stats = {
-        labels: data.period.reverse(),
+        labels: data?.period?.reverse(),
         datasets: [
           {
             label: 'Average Moisture',
