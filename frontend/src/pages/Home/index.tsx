@@ -57,7 +57,7 @@ const converTimeStamp = (timestamp: string) => {
 const Home = () => {
   const [data, setData] = useState<SoilDataType[]>([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     console.log(event);
@@ -130,7 +130,7 @@ const Home = () => {
               </Table>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
+              rowsPerPageOptions={[5, 10, 25]}
               component="div"
               count={data.length}
               rowsPerPage={rowsPerPage}
