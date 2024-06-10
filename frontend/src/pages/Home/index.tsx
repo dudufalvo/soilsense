@@ -70,7 +70,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    axios.get('http://soilsense.pythonanywhere.com/api/soil-data')
+    axios.get('https://soilsense.pythonanywhere.com/api/soil-data')
     .then((response) => {
       const data = response.data;
       const soilData = data.map((item: FetchDataType) => {
