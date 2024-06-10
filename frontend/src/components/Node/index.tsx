@@ -135,7 +135,7 @@ const Node = ({ node_id }: NodeRequestType) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [stats, setStats] = useState<any>();
-  const [selectedDate, setSelectedDate] = useState<DropdownOptionType>({ label: 'Hour', value: 'hour' });
+  const [selectedDate, setSelectedDate] = useState<DropdownOptionType>({ label: 'Last Records', value: 'last_ten_data' });
 
   const handleChangePage = (event: unknown, newPage: number) => {
     console.log(event);
@@ -231,6 +231,7 @@ const Node = ({ node_id }: NodeRequestType) => {
   , [selectedDate]);
 
   const filters = [
+    { label: 'Last Records', value: 'last_ten_data' },
     { label: 'Hour', value: 'hour' },
     { label: 'Day', value: 'day' },
     { label: 'Week', value: 'week' },

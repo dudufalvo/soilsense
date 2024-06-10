@@ -96,7 +96,7 @@ export type DropdownOptionType = {
 
 export const LineChart = () => {
   const [stats, setStats] = useState<any>();
-  const [selectedDate, setSelectedDate] = useState<DropdownOptionType>({ label: 'Hour', value: 'hour' });
+  const [selectedDate, setSelectedDate] = useState<DropdownOptionType>({ label: 'Last Records', value: 'last_ten_data' });
 
   const handleSelectedDate = (value: SingleValue<DropdownOptionType> | MultiValue<DropdownOptionType>) => {
     if (!value) return
@@ -134,6 +134,7 @@ export const LineChart = () => {
   , [selectedDate]);
 
   const filters = [
+    { label: 'Last Records', value: 'last_ten_data' },
     { label: 'Hour', value: 'hour' },
     { label: 'Day', value: 'day' },
     { label: 'Week', value: 'week' },

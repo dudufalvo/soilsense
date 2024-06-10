@@ -268,8 +268,17 @@ def node_average_moisture(request, pk, period):
   
   # get the current date and time
   current_date = timezone.now()
+  
+  if period == 'last_ten_data':
+    # get the last 10 data of the node and return the moisture and the timestamp
+    moisture = []
+    time = []
+    for data in soil_data.order_by('-timestamp')[:10]:
+      moisture.append(data.moisture)
+      time.append(data.timestamp.strftime("%d/%m %H:%M"))
+    return JsonResponse({'avarage_moisture': moisture, 'period': time})
 
-  if period == 'hour':
+  elif period == 'hour':
     # get the average moisture of the last 60 minutes divided in blocks of 5 minutes and return the average and the time block
     average_moisture = []
     time_block = []
