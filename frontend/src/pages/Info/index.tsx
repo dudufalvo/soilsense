@@ -223,18 +223,9 @@ const Info = () => {
 
           <p>
             <b>Webhook Integration</b>
-            <br/><br/>When it comes to the server, or database, part, we started by verifying which kind of data we would
-            collect from the node’s sensors and, based on that, drawing an ER diagram in order to guide us in the
-            database creation. After the ER diagram drawing step, we followed to implement the database tables
-            and querys. For this step of the task, after a long research, we decided to use a Python framework,
-            called Django, that allow us to create and relate tables in a easier way, and also simplifies the creation
-            process of the API for our database. The creation of and API was necessary so the hardware could
-            communicate to the database using HTTP requests.
-            <br/><br/>With all the database tables and querys being created and tested locally, we proceeded to deploy
-            our database in a cloud based server. After some research, we decided to proceed our backend deploy
-            in the PythonAnywhere platform, since it allow us to free deploy one project without query limits
-            per hour. Currently, the database management system has been successfully implemented, being
-            accessible in https://soilsense.pythonanywhere.com/.
+            <br/><br/>Finally, we use the webhooks that the "The Things Network" platform offers us in order to connect our sensors with our database.
+            <br/><br/>The first webhook that we create is a "Uplink Message", that is responsible for whenever a new information from the node reaches the TTN platform, it automatically triggers our database, through the https://soilsense.pythonanywhere/api/soil-data, making a POST request using the information received in TTN.
+            <br/><br/>And the second webhook created was a "Downlink Message", that performs the reverse function, when calling an endpoint from our server, the TTN is triggered and sends a message to our node. This function was implemented in order to develop the "irrigation request" from the platform to the hardware.
           </p>
         </div>
 
