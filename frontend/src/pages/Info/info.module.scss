@@ -1,0 +1,31 @@
+@import '../../styles/mixins.scss';
+@import '../../styles/variables.scss';
+
+.main {
+  padding: 1.5rem 3rem 5rem 3rem;
+  @include size(100%);
+  @include flex(column, flex-start, flex-start, 2rem);
+}
+
+.info {
+  @include flex(column, flex-start, flex-start, 1rem);
+  @include size(100%);
+}
+
+.image {
+  @include size(100%);
+  @include flex(column, center, center, 1rem);
+
+  img {
+    @include size(50%);
+    
+  }
+}
+
+.videoResponsive {
+  width: 100%;
+}
+
+.videoResponsive iframe {
+  width: 100%;
+}

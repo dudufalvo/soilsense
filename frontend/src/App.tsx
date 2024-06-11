@@ -12,6 +12,7 @@ import { Outlet } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
 import CreateCentral from 'pages/CreateCentral'
 import Centrals from 'pages/Centrals'
+import Info from 'pages/Info'
 
 const App = () => {
   return (
@@ -20,8 +21,7 @@ const App = () => {
         <Route element={<NotAuthenticatedRoute />} >
           <Route path='/sign-up' element={<SignUp />} />
           <Route path='/sign-in' element={<SignIn />} />
-          {/* <Route path='/client/forgot-password' element={<RecoverPassword />} />
-          <Route path='/client/reset/:token' element={<ResetPassword />} /> */}
+          <Route path='/info' element={<Info />} />
         </Route>
         <Route element={<PrivateRoute />} >
           <Route
