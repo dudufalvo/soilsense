@@ -143,13 +143,17 @@ const Node = ({ node_id }: NodeRequestType) => {
   };
 
   const handleIrrigation = () => {
-    const downlinks = {
-      f_port: 2,
-      frm_payload: 'vu8=',
-      priority: 'NORMAL'
+    const data = {
+      downlinks: [
+        {
+          f_port: 2,
+          frm_payload: 'vu8=',
+          priority: 'NORMAL'
+        }
+      ]
     }
 
-    axios.post(`https://eu1.cloud.thethings.network/api/v3/as/applications/soilsense-lora-app/devices/eui-0080e11505fa0370/down/push`, { downlinks }, { headers: { 'Authorization': `Bearer NNSXS.FMQQ4WHARZVAEBZ6JIXOZPPM2556CICX2YXBZJQ.KVEG536BTX62TJ4FQTCHKGRNIBFSSHUBDRLUGMJMIZBZ3EGQBFJQ`, 'Content-Type': 'application/json', 'User-Agent': 'my-integration/my-integration-version'}})
+    axios.post(`https://eu1.cloud.thethings.network/api/v3/as/applications/soilsense-lora-app/devices/eui-0080e11505fa0370/down/push`, { data }, { headers: { 'Authorization': `Bearer NNSXS.FMQQ4WHARZVAEBZ6JIXOZPPM2556CICX2YXBZJQ.KVEG536BTX62TJ4FQTCHKGRNIBFSSHUBDRLUGMJMIZBZ3EGQBFJQ`, 'Content-Type': 'application/json', 'User-Agent': 'my-integration/my-integration-version'}})
     .then(() => {
       toast.success('Irrigation started successfully');
     })
