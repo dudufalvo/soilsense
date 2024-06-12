@@ -157,7 +157,7 @@ const Node = ({ node_id }: NodeRequestType) => {
     const webhook_id = 'pythonanywhere-webhook';
     const device_id = node_id;
 
-    axios.post(`https://eu1.cloud.thethings.network/api/v3/as/applications/${application_id}/webhooks/${webhook_id}/devices/${device_id}/down/push`, { data }, { headers: { 'Authorization': `Bearer NNSXS.FMQQ4WHARZVAEBZ6JIXOZPPM2556CICX2YXBZJQ.KVEG536BTX62TJ4FQTCHKGRNIBFSSHUBDRLUGMJMIZBZ3EGQBFJQ` }})
+    axios.post(`https://eu1.cloud.thethings.network/api/v3/as/applications/${application_id}/webhooks/${webhook_id}/devices/${device_id}/down/push`, { data }, { headers: { 'Authorization': `Bearer NNSXS.FAMQQ4WHARZVAEBZ6JIXOZPPM2556CICX2YXBZJQ.KVEG536BTX62TJ4FQTCHKGRNIBFSSHUBDRLUGMJMIZBZ3EGQBFJQ` }})
     .then(() => {
       toast.success('Irrigation started successfully');
     })
