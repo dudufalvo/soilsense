@@ -149,6 +149,7 @@ const Node = ({ node_id }: NodeRequestType) => {
           f_port: 2,
           frm_payload: 'vu8=',
           priority: 'NORMAL',
+          confirmed: true
         }
       ]
     }
