@@ -143,7 +143,21 @@ const Node = ({ node_id }: NodeRequestType) => {
   };
 
   const handleIrrigation = () => {
-    axios.get(`${process.env.VITE_API_BASE_URL}/node/irrigate/${node_id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }})
+    const data = {
+      downlinks: [
+        {
+          f_port: 2,
+          frm_payload: 'vu8=',
+          priority: 'NORMAL',
+        }
+      ]
+    }
+
+    const application_id = 'soilsense-lora-app';
+    const webhook_id = 'pythonanywhere-webhook';
+    const device_id = node_id;
+
+    axios.post(`https://eu1.cloud.thethings.network/api/v3/as/applications/${application_id}/webhooks/${webhook_id}/devices/${device_id}/down/push`, { data }, { headers: { 'Authorization': `Bearer NNSXS.FMQQ4WHARZVAEBZ6JIXOZPPM2556CICX2YXBZJQ.KVEG536BTX62TJ4FQTCHKGRNIBFSSHUBDRLUGMJMIZBZ3EGQBFJQ` }})
     .then(() => {
       toast.success('Irrigation started successfully');
     })
