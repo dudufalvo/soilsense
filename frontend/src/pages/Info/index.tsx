@@ -14,21 +14,7 @@ const Info = () => {
       <NavbarInfo/>
       <div className={styles.main}>
         <div className={styles.info}>
-          <h1>Abstract</h1>
-          <p>
-            In the context of enhancing agricultural efficiency, this project presents a soil moisture monitoring
-            system that leverages a long-range network, low-power consumption, and a cloud-based platform for
-            data storage. The system uses the Modbus protocol for reliable communication, LoRa for long-range
-            data transmission, and integrates with The Things Network[5] for seamless data flow. The node,
-            powered by solar energy, collects moisture data from multiple sensors and transmits it to a gateway.
-            A webhook in The Things Network triggers events to store relevant data in a cloud server, deployed
-            using Django and Django Rest Framework on PythonAnywhere[1]. The client application, developed
-            with React, TypeScript, and Sass, and deployed on Vercel[4], provides a user-friendly interface for
-            monitoring and controlling soil moisture. The final prototype demonstrates significant advancements
-            in software development, database deployment, and web application development.
-            <br/><br/>Keywords: LoRa, The Things Network, soil moisture, IoT, Cloud, Modbus, agricultural system,
-            irrigation control, Web application.
-          </p>
+          <h1 style={{ textAlign: 'center' }}>Soilsense: A Cloud based Low-Power Long-Range Network for Soil Moisture Monitoring in Agriculture</h1>
         </div>
 
         <div className={styles.info}>
