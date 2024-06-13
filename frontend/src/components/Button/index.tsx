@@ -8,7 +8,8 @@ const buttonStyles: { [key: string]: string } = {
   google: styles.google,
   iconOutlined: styles.iconOutlined,
   iconFilled: styles.iconFilled,
-  onlyIcon: styles.onlyIcon
+  onlyIcon: styles.onlyIcon,
+  red: styles.red,
 }
 
 const Button = ({

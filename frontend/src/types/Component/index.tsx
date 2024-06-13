@@ -9,7 +9,7 @@ export type ButtonType = {
   handle?: () => void,
   disabled?: boolean,
   fullWidth?: boolean,
-  variant?: 'filled' | 'outlined' | 'google' | 'iconOutlined' | 'iconFilled' | 'onlyIcon',
+  variant?: 'filled' | 'outlined' | 'google' | 'iconOutlined' | 'iconFilled' | 'onlyIcon' | 'red',
   icon?: ReactNode,
   iconPosition?: 'left' | 'middle' | 'right',
   isActive?: boolean

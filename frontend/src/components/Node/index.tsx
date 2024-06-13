@@ -261,7 +261,7 @@ const Node = ({ node_id }: NodeRequestType) => {
     <div className={styles.main}>
       <div className={styles.flex2}>
         <h2>{`${node_id.toUpperCase()}`}</h2>
-        <Button children={<span>{isIrrigating ? 'Stop Irrigation': 'Start Irrigation'}</span>} handle={handleIrrigation} />
+        <Button children={<span>{isIrrigating ? 'Stop Irrigation': 'Start Irrigation'}</span>} handle={handleIrrigation} variant={isIrrigating ? 'red' : 'filled'} />
       </div>
 
       <div className={styles.flex}>
