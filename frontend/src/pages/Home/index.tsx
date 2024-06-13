@@ -87,7 +87,7 @@ const Home = () => {
     const moisturePercent = ((moistureValue - minOriginal) * (maxDesired - minDesired)) / (maxOriginal - minOriginal) + minDesired;
   
     // Limitar o valor para ficar entre 0% e 100%
-    return Math.max(0, Math.min(100, moisturePercent));
+    return Math.max(0, Math.min(100, moisturePercent)).toFixed(2);
   };
 
   useEffect(() => {

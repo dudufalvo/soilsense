@@ -169,7 +169,27 @@ const Node = ({ node_id }: NodeRequestType) => {
 
     setIsIrrigating(true);
   }
+
+  const convertMoisture = (moistureValue: number) => {
+    // Fixar os valores maiores que 550 em 550
+    if (moistureValue > 550) {
+      moistureValue = 550;
+    }
   
+    // Defina os limites da escala original
+    const minOriginal = 0;
+    const maxOriginal = 550;
+  
+    // Defina os limites da escala desejada (0% a 100%)
+    const minDesired = 100;
+    const maxDesired = 0;
+  
+    // Mapeamento linear dos valores de umidade
+    const moisturePercent = ((moistureValue - minOriginal) * (maxDesired - minDesired)) / (maxOriginal - minOriginal) + minDesired;
+  
+    // Limitar o valor para ficar entre 0% e 100%
+    return Math.max(0, Math.min(100, moisturePercent)).toFixed(2);
+  };
 
   const handleSelectedDate = (value: SingleValue<DropdownOptionType> | MultiValue<DropdownOptionType>) => {
     if (!value) return
@@ -190,9 +210,10 @@ const Node = ({ node_id }: NodeRequestType) => {
 
       const soilData = data.map((item: FetchDataType) => {
         const {date, time} = converTimeStamp(item.timestamp);
+        const moisturePercent = convertMoisture(item.moisture).toString() + '%';
         return {
           soil_data_id: item.soil_data_id,
-          moisture: item.moisture,
+          moisture: moisturePercent,
           sensor_id: item.sensor_id,
           date: date,
           time: time,
