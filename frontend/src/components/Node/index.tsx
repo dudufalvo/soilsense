@@ -136,6 +136,7 @@ const Node = ({ node_id }: NodeRequestType) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [stats, setStats] = useState<any>();
   const [selectedDate, setSelectedDate] = useState<DropdownOptionType>({ label: 'Last Records', value: 'last_ten_data' });
+  const [isIrrigating, setIsIrrigating] = useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     console.log(event);
@@ -143,23 +144,30 @@ const Node = ({ node_id }: NodeRequestType) => {
   };
 
   const handleIrrigation = () => {
-    /* const data = {
-      downlinks: [
-        {
-          f_port: 2,
-          frm_payload: 'vu8=',
-          priority: 'NORMAL'
-        }
-      ]
-    } */
 
-    axios.post(`https://eu1.cloud.thethings.network/api/v3/as/applications/soilsense-lora-app/devices/eui-0080e11505fa0370/down/push`, { "downlinks": [{"f_port": 2, "frm_payload": 'AQ==', "priority": 'NORMAL'}] }, { headers: { 'Authorization': `Bearer NNSXS.FMQQ4WHARZVAEBZ6JIXOZPPM2556CICX2YXBZJQ.KVEG536BTX62TJ4FQTCHKGRNIBFSSHUBDRLUGMJMIZBZ3EGQBFJQ`, 'Content-Type': 'application/json'}})
+    if (isIrrigating) {
+      axios.post(`https://eu1.cloud.thethings.network/api/v3/as/applications/soilsense-lora-app/devices/${node_id}/down/push`, { "downlinks": [{"f_port": 2, "frm_payload": 'AA==', "priority": 'NORMAL'}] }, { headers: { 'Authorization': `Bearer NNSXS.FMQQ4WHARZVAEBZ6JIXOZPPM2556CICX2YXBZJQ.KVEG536BTX62TJ4FQTCHKGRNIBFSSHUBDRLUGMJMIZBZ3EGQBFJQ`, 'Content-Type': 'application/json'}})
+      .then(() => {
+        toast.success('Irrigation stopped successfully');
+        setIsIrrigating(false);
+      })
+      .catch(() => {
+        toast.error('Failed to stop irrigation');
+      });
+
+      setIsIrrigating(false);
+      return;
+    }
+
+    axios.post(`https://eu1.cloud.thethings.network/api/v3/as/applications/soilsense-lora-app/devices/${node_id}/down/push`, { "downlinks": [{"f_port": 2, "frm_payload": 'AQ==', "priority": 'NORMAL'}] }, { headers: { 'Authorization': `Bearer NNSXS.FMQQ4WHARZVAEBZ6JIXOZPPM2556CICX2YXBZJQ.KVEG536BTX62TJ4FQTCHKGRNIBFSSHUBDRLUGMJMIZBZ3EGQBFJQ`, 'Content-Type': 'application/json'}})
     .then(() => {
       toast.success('Irrigation started successfully');
     })
     .catch(() => {
       toast.error('Failed to start irrigation');
     });
+
+    setIsIrrigating(true);
   }
   
 
@@ -253,7 +261,7 @@ const Node = ({ node_id }: NodeRequestType) => {
     <div className={styles.main}>
       <div className={styles.flex2}>
         <h2>{`${node_id.toUpperCase()}`}</h2>
-        <Button children={<span>Irrigate</span>} handle={handleIrrigation} />
+        <Button children={<span>{isIrrigating ? 'Stop Irrigation': 'Start Irrigation'}</span>} handle={handleIrrigation} />
       </div>
 
       <div className={styles.flex}>
