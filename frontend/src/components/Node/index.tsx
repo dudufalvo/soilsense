@@ -319,7 +319,7 @@ const Node = ({ node_id }: NodeRequestType) => {
                   <StyledTableCell align="right">{row.time}</StyledTableCell>
                   <StyledTableCell align="right">{row.latitude}</StyledTableCell>
                   <StyledTableCell align="right">{row.longitude}</StyledTableCell>
-                  <StyledTableCell align="right">{row.battery}</StyledTableCell>
+                  <StyledTableCell align="right">{`${row.battery}.00%`}</StyledTableCell>
                   <StyledTableCell align="right">{row.moisture}</StyledTableCell>
                 </StyledTableRow>
               ))}
