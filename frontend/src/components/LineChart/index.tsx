@@ -105,6 +105,27 @@ export const LineChart = () => {
     setSelectedDate(filteredDate)
   }
 
+  const convertMoisture = (moistureValue: number) => {
+    // Fixar os valores maiores que 550 em 550
+    if (moistureValue > 550) {
+      moistureValue = 550;
+    }
+  
+    // Defina os limites da escala original
+    const minOriginal = 0;
+    const maxOriginal = 550;
+  
+    // Defina os limites da escala desejada (0% a 100%)
+    const minDesired = 100;
+    const maxDesired = 0;
+  
+    // Mapeamento linear dos valores de umidade
+    const moisturePercent = ((moistureValue - minOriginal) * (maxDesired - minDesired)) / (maxOriginal - minOriginal) + minDesired;
+  
+    // Limitar o valor para ficar entre 0% e 100% e arredondar para duas casas decimais
+    return Math.max(0, Math.min(100, moisturePercent)).toFixed(2);
+  };
+
   useEffect(() => {
     axios.get(`${process.env.VITE_API_BASE_URL}/central-stats/e081f162-6a3a-4982-85f1-a54a152c965b/${selectedDate?.value}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
     .then((response) => {
@@ -116,7 +137,7 @@ export const LineChart = () => {
         datasets: [
           {
             label: 'Average Moisture',
-            data: data.average_moisture.reverse().map((item: number) => item > 550 ? 550 : item),
+            data: data?.average_moisture?.map((item: number) => { return convertMoisture(item) }),
             borderColor: 'rgb(135, 178, 114)',
             backgroundColor: 'rgba(135, 178, 114, 0.5)',
             yAxisID: 'y',
